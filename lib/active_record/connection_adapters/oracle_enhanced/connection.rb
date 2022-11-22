@@ -55,9 +55,7 @@ module ActiveRecord
               WHERE owner = 'PUBLIC'
                 AND synonym_name = '#{real_name}'
             SQL
-            puts sql
             if result = _select_one(sql)
-              puts result["name_type"]
               case result["name_type"]
               when "SYNONYM"
                 describe("#{result['owner'] && "#{result['owner']}."}#{result['table_name']}")
@@ -65,6 +63,8 @@ module ActiveRecord
                 [result["owner"], result["table_name"]]
               end
             else
+              puts "Result is #{result}"
+              puts "SQL is ****#{sql}****"
               raise OracleEnhanced::ConnectionException, %Q{"CUSTOM DESC #{name}" failed; does it exist?}
             end
           end
